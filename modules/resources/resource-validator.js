@@ -4,26 +4,22 @@ module.exports = class ResourceValidator {
   validate(knowledge) {
     if (!knowledge.keyWords) throw new Error('knowledge should have keywords');
 
-    const keywordsTypes = Object.keys(knowledge.keyWords);
-    if (!keywordsTypes.length) throw new Error('keywords should at least contain one type');
-
-    const types = keywordsTypes.map(type => knowledge.keyWords[type]);
-    const valideKeywords = this._valdiateKeywords(types);
+    const valideKeywords = this.valdiateKeywords(knowledge.keyWords);
     if (!valideKeywords) throw new Error('keywords structures are wrong');
 
     if (!knowledge.intents) throw new Error('knowledge should have intents');
 
-    const intentsKeys = Object.keys(knowledge.intents);
-    if (!intentsKeys.length) throw new Error('knowledge should contain at least one intent');
-
-    const intents = intentsKeys.map(key => knowledge.intents[key]);
-    const valideIntents = this._validateIntents(intents);
+    const valideIntents = this.validateIntents(knowledge.intents);
     if (!valideIntents) throw new Error('Intents structures are wrong');
 
     return knowledge;
   }
 
-  _valdiateKeywords(types) {
+  valdiateKeywords(keyWords) {
+    const keywordsTypes = Object.keys(keyWords);
+    if (!keywordsTypes.length) throw new Error('keywords should at least contain one type');
+
+    const types = keywordsTypes.map(type => keyWords[type]);
     return types.every(type => {
       const enteries = Object.keys(type);
       if (!enteries.length) return false;
@@ -37,8 +33,12 @@ module.exports = class ResourceValidator {
     });
   }
 
-  _validateIntents(intents) {
-    return intents.every(intent => {
+  validateIntents(intents) {
+    const intentsKeys = Object.keys(intents);
+    if (!intentsKeys.length) throw new Error('knowledge should contain at least one intent');
+
+    const enteries = intentsKeys.map(key => intents[key]);
+    return enteries.every(intent => {
       return intent.texts &&
       Array.isArray(intent.texts) &&
       !!intent.texts.length &&

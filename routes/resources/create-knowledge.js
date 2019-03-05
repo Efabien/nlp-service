@@ -6,12 +6,14 @@ module.exports = class CreateKnowledge {
     this.handler = this.handler.bind(this);
 
     this._knowledgeModel = models.knowledgeModel;
+    this._userModel = models.userModel;
     this._resourceValidator = modules.resourceValidator;
   }
 
   async handler(req, res, next) {
     try {
       const data = this._validate(req.body);
+      data.owner = req.user;
       const knowledge = await this._knowledgeModel.create({ ...data });
       return res.status(httpStatus.OK).json({ knowledge });
     } catch (e) {

@@ -2,17 +2,24 @@
 const { APP } = require('./config');
 const port = APP.port;
 const connectionString = APP.connectionString;
+const saltRounds = APP.saltRounds;
+const session = APP.session;
 
 // Internal dependencies
 const ErrorHandler = require('./middlewares/error-handler');
+const TokenAuth = require('./middlewares/token-auth');
 const ExpressBootstrapper = require('./modules/express-bootstrapper');
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 const ResourceValidator = require('./modules/resources/resource-validator');
+const SessionManager = require('./modules/session-manager');
+
 
 //utils
 const errorHandler = new ErrorHandler();
 const resourceValidator = new ResourceValidator();
+const sessionManager = new SessionManager({ session });
+const tokenAuth = new TokenAuth({ sessionManager });
 
 //models
 const userModel = require('./models/user-model');
@@ -22,10 +29,14 @@ const knowledgeModel = require('./models/knowledge-model');
 const Routes = require('./routes');
 const TestRoute = require('./routes/test');
 const ResourcesRoute = require('./routes/resources');
+const UsersRoute = require('./routes/users');
+const AuthenticateRoute = require('./routes/authenticate');
 
 // routes instances
 const testRoute = new TestRoute({ knowledgeModel });
-const resourcesroute = new ResourcesRoute({ knowledgeModel }, { resourceValidator });
+const resourcesroute = new ResourcesRoute({ knowledgeModel }, { tokenAuth }, { resourceValidator });
+const usersRoute = new UsersRoute({ userModel }, { saltRounds });
+const authenticateRoute = new AuthenticateRoute({ userModel }, { sessionManager });
 
 // Mongo-connection
 mongoose.connect(connectionString, { useNewUrlParser: true });
@@ -39,7 +50,9 @@ expressBootstrapper.bootstrap();
 const routes = new Routes(
   [
     testRoute,
-    resourcesroute
+    resourcesroute,
+    usersRoute,
+    authenticateRoute
   ],
   errorHandler
 );
