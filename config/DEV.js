@@ -7,5 +7,9 @@ module.exports = Object.freeze({
       privateKey: process.env.NLP_SERVICE_SESSION_KEY,
       expiration: '5d'
     }
+  },
+  NLP: {
+    degree: 2,
+    scope: 3
   }
 });

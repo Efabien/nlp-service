@@ -23,6 +23,7 @@
   "dependencies": {
     "bcrypt": "^2.0.1",
     "body-parser": "^1.17.1",
+    "botbrain": "git+https://github.com/Efabien/brain.git#dynamik",
     "cheerio": "latest",
     "cors": "^2.8.4",
     "express": "^4.16.2",
