@@ -66,11 +66,11 @@ module.exports = class UpdateKnowledge {
 
     if (data.intents) {
       const intentsKeys = Object.keys(data.intents);
-      const intentssToSave = intentsKeys.reduce((resulte, key) => {
+      const intentsToSave = intentsKeys.reduce((resulte, key) => {
         resulte[`intents.${key}`] = data.intents[key];
         return resulte;
       }, {});
-      query.$set = _.merge(query.$set, intentssToSave);
+      query.$set = _.merge(query.$set, intentsToSave);
     }
     return query;
   }

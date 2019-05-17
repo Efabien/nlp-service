@@ -7,6 +7,7 @@ const session = APP.session;
 
 // Internal dependencies
 const ErrorHandler = require('./middlewares/error-handler');
+const EnableCors = require('./middlewares/enable-cors');
 const TokenAuth = require('./middlewares/token-auth');
 const ExpressBootstrapper = require('./modules/express-bootstrapper');
 const mongoose = require('mongoose');
@@ -18,6 +19,7 @@ const Brain = require('botbrain');
 
 //utils
 const errorHandler = new ErrorHandler();
+const enableCors = new EnableCors();
 const resourceValidator = new ResourceValidator();
 const sessionManager = new SessionManager({ session });
 const tokenAuth = new TokenAuth({ sessionManager });
@@ -39,14 +41,18 @@ const AnalysesRoute = require('./routes/analyses');
 const testRoute = new TestRoute({ knowledgeModel });
 const resourcesroute = new ResourcesRoute({ knowledgeModel }, { tokenAuth }, { resourceValidator });
 const usersRoute = new UsersRoute({ userModel }, { saltRounds });
-const authenticateRoute = new AuthenticateRoute({ userModel }, { sessionManager });
+const authenticateRoute = new AuthenticateRoute(
+  { userModel },
+  { sessionManager },
+  { tokenAuth }
+);
 const analysesRoute = new AnalysesRoute({ knowledgeModel }, { tokenAuth }, { brain });
 // Mongo-connection
 mongoose.connect(connectionString, { useNewUrlParser: true });
 
 // Bootstrap
 const expressBootstrapper = new ExpressBootstrapper(
-  { errorHandler }
+  { errorHandler, enableCors }
 );
 expressBootstrapper.bootstrap();
 
