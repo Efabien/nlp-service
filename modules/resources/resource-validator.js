@@ -2,8 +2,6 @@ const _ = require('lodash');
 
 module.exports = class ResourceValidator {
   validate(knowledge) {
-    if (!knowledge.keyWords) throw new Error('knowledge should have keywords');
-
     const valideKeywords = this.valdiateKeywords(knowledge.keyWords);
     if (!valideKeywords) throw new Error('keywords structures are wrong');
 
@@ -16,6 +14,7 @@ module.exports = class ResourceValidator {
   }
 
   valdiateKeywords(keyWords) {
+    if (!keyWords) return true;
     const keywordsTypes = Object.keys(keyWords);
     if (!keywordsTypes.length) throw new Error('keywords should at least contain one type');
 
