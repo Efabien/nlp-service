@@ -15,7 +15,11 @@ mongoose.Promise = Promise;
 const ResourceValidator = require('./modules/resources/resource-validator');
 const SessionManager = require('./modules/session-manager');
 const Brain = require('botbrain');
+const Cognitive = require('./modules/cognitive');
 
+//models
+const userModel = require('./models/user-model');
+const knowledgeModel = require('./models/knowledge-model');
 
 //utils
 const errorHandler = new ErrorHandler();
@@ -24,10 +28,8 @@ const resourceValidator = new ResourceValidator();
 const sessionManager = new SessionManager({ session });
 const tokenAuth = new TokenAuth({ sessionManager });
 const brain = new Brain({ degree: NLP.degree, scope: NLP.scope });
+const cognitive = new Cognitive({ knowledgeModel }, { brain });
 
-//models
-const userModel = require('./models/user-model');
-const knowledgeModel = require('./models/knowledge-model');
 
 //routes
 const Routes = require('./routes');
@@ -46,7 +48,7 @@ const authenticateRoute = new AuthenticateRoute(
   { sessionManager },
   { tokenAuth }
 );
-const analysesRoute = new AnalysesRoute({ knowledgeModel }, { tokenAuth }, { brain });
+const analysesRoute = new AnalysesRoute({ knowledgeModel }, { tokenAuth }, { brain, cognitive });
 // Mongo-connection
 mongoose.connect(connectionString, { useNewUrlParser: true });
 

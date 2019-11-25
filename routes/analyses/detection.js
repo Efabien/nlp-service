@@ -7,6 +7,7 @@ module.exports = class Detection {
 
     this._brain = modules.brain;
     this._knowledgeModel = models.knowledgeModel;
+    this._cognitive = modules.cognitive;
 
     this._schema = Joi.compile({
       text: Joi.string().required()
@@ -16,15 +17,21 @@ module.exports = class Detection {
   async handler(req, res, next) {
     try {
       const text = this._validate(req.body).text;
-      const knowledges = await this._knowledgeModel.find(
-        { owner: req.user },
-        { keyWords: 1, intents: 1 }
-      ).lean();
-      const { analyse, keyWords } = this._brain.detect(text, knowledges);
-      return res.status(httpStatus.OK).json({ analyse, keyWords });
+      if (!req.query.single) return this._rawResponse(req.user, text, res);
+      return this._response(req.user, text, res);
     } catch (e) {
       return next(e);
     }
+  }
+
+  async _rawResponse(userId, text, res) {
+    const { analyse, keyWords } = await this._cognitive.detect(userId, text);
+    return res.status(httpStatus.OK).json({ analyse, keyWords });
+  }
+
+  async _response(userId, text, res) {
+    const { intent, keyWords } = await this._cognitive.infer(userId, text);
+    return res.status(httpStatus.OK).json({ intent, keyWords });
   }
 
   _validate(data) {
