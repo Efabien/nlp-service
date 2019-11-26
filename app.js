@@ -20,6 +20,7 @@ const Cognitive = require('./modules/cognitive');
 //models
 const userModel = require('./models/user-model');
 const knowledgeModel = require('./models/knowledge-model');
+const testModel = require('./models/test-model');
 
 //utils
 const errorHandler = new ErrorHandler();
@@ -48,7 +49,11 @@ const authenticateRoute = new AuthenticateRoute(
   { sessionManager },
   { tokenAuth }
 );
-const analysesRoute = new AnalysesRoute({ knowledgeModel }, { tokenAuth }, { brain, cognitive });
+const analysesRoute = new AnalysesRoute(
+  { knowledgeModel, testModel },
+  { tokenAuth },
+  { brain, cognitive }
+);
 // Mongo-connection
 mongoose.connect(connectionString, { useNewUrlParser: true });
 
