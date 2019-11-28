@@ -1,5 +1,5 @@
 const express = require('express');
-const CreateUser = require('./create-User');
+const CreateUser = require('./create-user');
 
 module.exports = class UserssRoute {
   constructor(models, config) {
