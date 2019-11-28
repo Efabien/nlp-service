@@ -30,7 +30,7 @@ module.exports = class Test {
     for (let i = 0; i < total; i++) {
       let current = cases[i];
       let { intent } = await this._cognitive.infer(userId, current.input);
-      if (intent.intent === current.expected) {
+      if (intent && intent.intent === current.expected) {
         correctCount ++;
       } else {
         wrongs.push(

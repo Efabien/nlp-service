@@ -19,6 +19,7 @@ module.exports = class Cognitive {
       { keyWords: 1, intents: 1 }
     ).lean();
     let { analyse, keyWords } = this._brain.detect(text, knowledges);
+    console.log(analyse)
 
     const analyseByScore = analyse.sort((a, b ) => {
       if (a.score === b.score) return 0;
