@@ -9,7 +9,7 @@ module.exports = class Analyses {
     this._tokenAuth = middlewares.tokenAuth;
     this.detection = new Detection(models, modules);
     this.test = new Test(modules);
-    this.updateTest = new UpdateTest(models);
+    this.updateTest = new UpdateTest(models, modules);
     this.testList = new TestList(models);
   }
 
