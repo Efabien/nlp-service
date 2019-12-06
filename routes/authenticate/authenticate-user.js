@@ -31,13 +31,8 @@ module.exports = class AuthenticateUser {
       { email: data.email },
       { hash: 1, email: 1 }
     ).lean();
-    if (!user) {
-      const err = new Error('User not registered');
-      err.status = httpStatus.BAD_REQUEST;
-      throw err;
-    }
-    if (!(await bcrypt.compare(data.password, user.hash))) {
-      const err = new Error('Wrong password');
+    if (!user || !(await bcrypt.compare(data.password, user.hash))) {
+      const err = new Error('Wrong email or Wrong password');
       err.statusCode = httpStatus.UNAUTHORIZED;
       throw err;
     }
