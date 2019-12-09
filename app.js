@@ -59,7 +59,7 @@ const analysesRoute = new AnalysesRoute(
   { brain, cognitive }
 );
 const appRoute = new AppRoute(
-  { appModel },
+  { appModel, subscriptionModel },
   { tokenAuth },
   { sessionManager }
 );
