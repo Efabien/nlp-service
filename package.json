@@ -35,7 +35,7 @@
     "http-status": "^1.0.1",
     "joi": "^13.0.1",
     "jsonwebtoken": "^8.1.0",
-    "mongoose": "^5.3.14",
+    "mongoose": "^5.7.5",
     "mongoose-double": "0.0.1",
     "request-promise": "^4.2.2"
   }
