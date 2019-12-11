@@ -3,6 +3,7 @@ const CreateApp = require('./create-app');
 const GenerateToken = require('./generate-token');
 const AppList = require('./app-list');
 const AppDetails = require('./app-details');
+const UpdateApp = require('./update-app');
 
 module.exports = class AppRoute {
   constructor(models, middlewares, modules) {
@@ -10,6 +11,7 @@ module.exports = class AppRoute {
     this._generateToken = new GenerateToken(models, modules);
     this._appList = new AppList(models);
     this._appDetails = new AppDetails(models);
+    this._updateApp = new UpdateApp(models);
     this._tokenAuth = middlewares.tokenAuth;
   }
 
@@ -18,6 +20,7 @@ module.exports = class AppRoute {
     api.use(this._tokenAuth.handler);
     api.get('/', this._appList.handler);
     api.get('/details/:appId', this._appDetails.handler);
+    api.patch('/update/:appId', this._updateApp.handler);
     api.post('/create', this._createApp.handler);
     api.get('/token/:id', this._generateToken.handler);
     app.use('/app', api);
