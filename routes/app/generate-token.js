@@ -10,15 +10,15 @@ module.exports = class GenerateToken {
 
   async handler(req, res, next) {
     try {
-      const app = await this._check(req.user, req.params.id);
-      const token = this._generate(app);
+      const app = await this._check(req.user, req.params.appId);
+      const token = this._generate(app, req.user);
       return res.status(httpStatus.OK).json({ app, token });
     } catch (e) {
       return next(e);
     }
   }
 
-  _generate(app) {
+  _generate(app, owner) {
     return this._sessionManager.signInApp(
       {
         appId: app._id,

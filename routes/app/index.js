@@ -22,7 +22,7 @@ module.exports = class AppRoute {
     api.get('/details/:appId', this._appDetails.handler);
     api.patch('/update/:appId', this._updateApp.handler);
     api.post('/create', this._createApp.handler);
-    api.get('/token/:id', this._generateToken.handler);
+    api.get('/token/:appId', this._generateToken.handler);
     app.use('/app', api);
   }
 }
