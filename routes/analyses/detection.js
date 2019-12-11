@@ -17,20 +17,28 @@ module.exports = class Detection {
   async handler(req, res, next) {
     try {
       const text = this._validate(req.body).text;
-      if (!req.query.single) return this._rawResponse(req.user, text, res);
-      return this._response(req.user, text, res);
+      if (!req.query.single) return this._rawResponse(
+        { userId: req.user, appId: req.app },
+        text,
+        res
+      );
+      return this._response(
+        { userId: req.user, appId: req.app },
+        text,
+        res
+      );
     } catch (e) {
       return next(e);
     }
   }
 
-  async _rawResponse(userId, text, res) {
-    const { analyse, keyWords } = await this._cognitive.detect(userId, text);
+  async _rawResponse({ userId, appId }, text, res) {
+    const { analyse, keyWords } = await this._cognitive.detect(userId, text, appId);
     return res.status(httpStatus.OK).json({ analyse, keyWords });
   }
 
-  async _response(userId, text, res) {
-    const { intent, keyWords } = await this._cognitive.infer(userId, text);
+  async _response({ userId, appId }, text, res) {
+    const { intent, keyWords } = await this._cognitive.infer(userId, text, appId);
     return res.status(httpStatus.OK).json({ intent, keyWords });
   }
 

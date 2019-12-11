@@ -3,10 +3,15 @@ const jwt = require('jsonwebtoken');
 module.exports = class SessionManager {
   constructor(config) {
     this._sessionConfig = config.session;
+    this._appSessionConfig = config.consumerAppSession;
   }
 
   signIn(data) {
     return this._sign(data, this._sessionConfig);
+  }
+
+  signInApp(data) {
+    return this._sign(data, this._appSessionConfig);
   }
 
   _sign(payload, session) {
@@ -15,6 +20,10 @@ module.exports = class SessionManager {
 
   verifyToken(token) {
     return this._checkToken(token, this._sessionConfig);
+  }
+
+  verifyAppToken(token) {
+    return this._checkToken(token, this._appSessionConfig);
   }
 
   retrieveHeaderToken(req) {

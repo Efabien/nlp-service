@@ -15,11 +15,10 @@ module.exports = class Analyses {
 
   initRoutes(app) {
     const api = express.Router();
-    api.use(this._tokenAuth.handler);
-    api.post('/', this.detection.handler);
-    api.post('/test', this.test.handler);
-    api.patch('/test', this.updateTest.handler);
-    api.get('/test', this.testList.handler);
+    api.post('/', this._tokenAuth.appHandler, this.detection.handler);
+    api.post('/test', this._tokenAuth.handler, this.test.handler);
+    api.patch('/test', this._tokenAuth.handler, this.updateTest.handler);
+    api.get('/test', this._tokenAuth.handler, this.testList.handler);
     app.use('/analyses', api);
   }
 };
