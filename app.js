@@ -32,7 +32,7 @@ const resourceValidator = new ResourceValidator();
 const sessionManager = new SessionManager({ session, consumerAppSession });
 const tokenAuth = new TokenAuth({ sessionManager });
 const brain = new Brain({ degree: NLP.degree, scope: NLP.scope });
-const cognitive = new Cognitive({ knowledgeModel }, { brain });
+const cognitive = new Cognitive({ knowledgeModel, subscriptionModel }, { brain });
 
 
 //routes
